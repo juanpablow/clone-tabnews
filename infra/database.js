@@ -9,12 +9,21 @@ async function query(queryObject) {
     password: process.env.POSTGRES_PASSWORD,
   });
 
-  await client.connect();
+  console.log({
+    host: process.env.POSTGRES_HOST,
+    port: process.env.POSTGRES_PORT,
+    user: process.env.POSTGRES_USER,
+    database: process.env.POSTGRES_DB,
+    password: process.env.POSTGRES_PASSWORD,
+  });
+
   try {
+    await client.connect();
     const result = await client.query(queryObject);
     return result.rows[0];
   } catch (e) {
-    console.error("Error executing query", e);
+    console.error(e);
+    throw e;
   } finally {
     await client.end();
   }
